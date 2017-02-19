@@ -1,3 +1,58 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container">
+  <img src="../assets/imgs/logo.png">
+
+  <form class="mainForm" (ngSubmit)="compare()">
+    <div class="form-inline">
+       <label>No. of products</label>
+      <select [(ngModel)]="numberOfProducts" [ngModelOptions]="{standalone: true}" class="form-control" style="width: 5em; display: inline;">
+          <option [ngValue]="2" >2</option>
+          <option [ngValue]="3" >3</option>
+          <option [ngValue]="4" >4</option>
+      </select>
+
+      <button type="button" class="btn btn-primary" (click)="initProducts(numberOfProducts)">Update</button>
+    </div>
+
+    <div class="col-sm-6" *ngFor="let product of products; let i = index; let last = last;">
+      <fieldset class="form-group row">
+        <legend class="col-form-legend col-sm-6">Option {{i + 1}}</legend>
+        <div class="col-sm-12">
+          <input type="tel" class="form-control" placeholder="Price" [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}" required>
+        </div>
+        <div class="col-sm-12">
+          <input type="tel" class="form-control" placeholder="Quantity" [(ngModel)]="product.quantity" [ngModelOptions]="{standalone: true}" required>
+        </div>
+        <div class="col-sm-12">
+          <input type="tel" class="form-control" placeholder="Units" [(ngModel)]="product.units" [ngModelOptions]="{standalone: true}" required>
+        </div>
+      </fieldset>
+      <div class="form-group row" *ngIf="last">
+        <div class="offset-sm-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">Compare</button>
+          <button type="button" class="btn btn-danger" (click)="initProducts(numberOfProducts)">Reset</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="container" *ngIf="showResults">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products | orderBy : ['value']; let i = index; let first = first;" [ngClass]="{'success' : first}">
+          <td>{{i + 1}}</td>
+          <td>{{product.name}}</td>
+          <td>{{product.value | number : '1.2-6'}} / $</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
